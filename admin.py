@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
+    def setupUi(self):
         MainWindow.setObjectName("MainWindow")
         MainWindow.showFullScreen()
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -53,6 +53,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
+    ui.setupUi()
     MainWindow.show()
     sys.exit(app.exec_())
