@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import MySQLdb #pip install --only-binary :all: mysqlclient
 
 class Ui_MainWindow(object):
     def setupUi(self):
