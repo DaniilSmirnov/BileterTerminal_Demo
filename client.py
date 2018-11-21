@@ -2,6 +2,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import MySQLdb #pip install --only-binary :all: mysqlclient
+from docx import Document #pip install python-docx
+from docx.shared import Inches
 
 class Ui_MainWindow(object):
     def setupUi(self):
@@ -209,7 +211,7 @@ class Ui_MainWindow(object):
         self.wherelabel.setText(_translate("MainWindow", "Куда"))
         self.arrivetimelabel.setText(_translate("MainWindow", "Время прибытия"))
         self.costlabel.setText(_translate("MainWindow", "Цена"))
-        self.filler.setText(_translate("MainWindow", "TextLabel"))
+        self.filler.setText(_translate("MainWindow", " "))
         self.backtomainbutton.setText(_translate("MainWindow", "Назад"))
         self.backtomainbutton.clicked.connect(self.setupUi)
 
