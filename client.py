@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'main.ui'
-#
-# Created by: PyQt5 UI code generator 5.10.1
-#
-# WARNING! All changes made in this file will be lost!
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -164,6 +158,9 @@ class Ui_MainWindow(object):
         self.arrivetimelabel = QtWidgets.QLabel(self.centralwidget)
         self.arrivetimelabel.setObjectName("arrivetimelabel")
         self.horizontalLayout.addWidget(self.arrivetimelabel)
+        self.costlabel = QtWidgets.QLabel(self.centralwidget)
+        self.costlabel.setObjectName("costlabel")
+        self.horizontalLayout.addWidget(self.costlabel)
         self.filler = QtWidgets.QLabel(self.centralwidget)
         self.filler.setObjectName("filler")
         self.horizontalLayout.addWidget(self.filler)
@@ -205,12 +202,13 @@ class Ui_MainWindow(object):
     def retranslateGlobalViewUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.routenumberlabel.setText(_translate("MainWindow", "TextLabel"))
-        self.fromlabel.setText(_translate("MainWindow", "TextLabel"))
-        self.departtimelabel.setText(_translate("MainWindow", "TextLabel"))
-        self.timeinttravellabel.setText(_translate("MainWindow", "TextLabel"))
-        self.wherelabel.setText(_translate("MainWindow", "TextLabel"))
-        self.arrivetimelabel.setText(_translate("MainWindow", "TextLabel"))
+        self.routenumberlabel.setText(_translate("MainWindow", "Рейс"))
+        self.fromlabel.setText(_translate("MainWindow", "Откуда"))
+        self.departtimelabel.setText(_translate("MainWindow", "Время отправления"))
+        self.timeinttravellabel.setText(_translate("MainWindow", "Время в пути"))
+        self.wherelabel.setText(_translate("MainWindow", "Куда"))
+        self.arrivetimelabel.setText(_translate("MainWindow", "Время прибытия"))
+        self.costlabel.setText(_translate("MainWindow", "Цена"))
         self.filler.setText(_translate("MainWindow", "TextLabel"))
         self.backtomainbutton.setText(_translate("MainWindow", "Назад"))
         self.backtomainbutton.clicked.connect(self.setupUi)
