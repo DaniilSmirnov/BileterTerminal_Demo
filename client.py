@@ -5,6 +5,7 @@ import MySQLdb #pip install --only-binary :all: mysqlclient
 from docx import Document #pip install python-docx
 from docx.shared import Inches
 
+
 class Ui_MainWindow(object):
     def setupUi(self):
         MainWindow.setObjectName("MainWindow")

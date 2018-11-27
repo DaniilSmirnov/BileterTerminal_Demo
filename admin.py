@@ -1,5 +1,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import MySQLdb #pip install --only-binary :all: mysqlclient
+import mysql.connector
+
+cnx = mysql.connector.connect(user='root', password='i130813',
+                              host='127.0.0.1',
+                              database='mydb')
+cnx.close()
+
 
 class Ui_MainWindow(object):
     def setupUi(self):
