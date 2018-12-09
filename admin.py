@@ -7,9 +7,10 @@ cnx = mysql.connector.connect(user='root', password='i130813',
 cursor = cnx.cursor()
 
 '''
-
+select * from trip;
 '''
 
+items = []
 
 class Ui_MainWindow(object):
 
@@ -101,11 +102,69 @@ class Ui_MainWindow(object):
         self.savebutton.setText(_translate("MainWindow", "Save"))
         self.cancelbutton.setText(_translate("MainWindow", "Cancel"))
 
+        line_item = QtWidgets.QLabel("Рейсы")
+        items.append(line_item)
+        self.gridLayout.addWidget(line_item, 0, 0, 1, 1)
+        query = ("select * from trip;")
+        cursor.execute(query)
+        i = 1
+        j = 3
+        k = 0
+        exec = True
+        for item in cursor:
+            for value in item:
+                if exec:
+                    exec = False
+                    continue
+                line_item = QtWidgets.QLineEdit(str(value))
+                self.gridLayout.addWidget(line_item, j, k, 1, 1)
+                line_item.textChanged.connect(lambda state, line=line_item: modify(line, j, k))
+                items.append(line_item)
+                if i == 7:
+                    i = 1
+                else:
+                    i += 1
+
+                k += 1
+
+            j += 1
+
+        line_item = QtWidgets.QLabel("Пассажиры")
+        items.append(line_item)
+        query = ("select * from passenger;")
+        cursor.execute(query)
+        i = 1
+        k = 0
+        exec = True
+        for item in cursor:
+            for value in item:
+                if exec:
+                    exec = False
+                    continue
+                line_item = QtWidgets.QLineEdit(str(value))
+                self.gridLayout.addWidget(line_item, j, k, 1, 1)
+                line_item.textChanged.connect(lambda state, line=line_item: modify(line))
+                items.append(line_item)
+                if i == 7:
+                    i = 1
+                else:
+                    i += 1
+
+                k += 1
+
+            j += 1
+
+        def modify(item, j ,k):
+            print(1)
+
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label_2.setText(_translate("MainWindow", "Login"))
         self.label.setText(_translate("MainWindow", "Password"))
+        self.loginedit.setText("1")
+        self.passedit.setText("1")
         self.pushButton.setText(_translate("MainWindow", "Войти"))
 
         self.pushButton.clicked.connect(self.login)
