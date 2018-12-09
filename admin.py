@@ -4,11 +4,12 @@ import mysql.connector
 cnx = mysql.connector.connect(user='root', password='i130813',
                               host='127.0.0.1',
                               database='mydb')
-cnx.close()
+cursor = cnx.cursor()
 
 '''
 
 '''
+
 
 class Ui_MainWindow(object):
 
@@ -50,7 +51,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def setupMainUi(self, MainWindow):
+    def setupMainUi(self):
         MainWindow.setObjectName("MainWindow")
         MainWindow.showFullScreen()
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -110,12 +111,19 @@ class Ui_MainWindow(object):
         self.pushButton.clicked.connect(self.login)
 
     def login(self):
-        username_entered = self.label2.text()
-        password_entered = self.label.text()
+        username_entered = self.loginedit.text()
+        password_entered = self.passedit.text()
 
-        query = ("SELECT ")
+        query = ("SELECT login from worker;")
+        cursor.execute(query)
 
-        cnx.execute(query)
+        for (login) in cursor:
+            if login[0] == username_entered:
+                query = ("SELECT pass from worker;")
+                cursor.execute(query)
+                for (password) in cursor:
+                    if password[0] == password_entered:
+                        self.setupMainUi()
 
 
 if __name__ == "__main__":
