@@ -12,6 +12,11 @@ select * from trip;
 
 items = []
 
+trip = []
+passenger = []
+passenger_data = {}
+passenger_k = {}
+
 class Ui_MainWindow(object):
 
     def setupUi(self):
@@ -112,13 +117,11 @@ class Ui_MainWindow(object):
         k = 0
         exec = True
         for item in cursor:
+            trip.append(item[0])
             for value in item:
-                if exec:
-                    exec = False
-                    continue
                 line_item = QtWidgets.QLineEdit(str(value))
                 self.gridLayout.addWidget(line_item, j, k, 1, 1)
-                line_item.textChanged.connect(lambda state, line=line_item: modify(line, j, k))
+                line_item.textChanged.connect(lambda state, line=line_item: modify_trip(line, j, k))
                 items.append(line_item)
                 if i == 7:
                     i = 1
@@ -135,28 +138,45 @@ class Ui_MainWindow(object):
         cursor.execute(query)
         i = 1
         k = 0
-        exec = True
         for item in cursor:
+            passenger.append(item[0])
             for value in item:
-                if exec:
-                    exec = False
-                    continue
                 line_item = QtWidgets.QLineEdit(str(value))
                 self.gridLayout.addWidget(line_item, j, k, 1, 1)
-                line_item.textChanged.connect(lambda state, line=line_item: modify(line))
+                line_item.textChanged.connect(lambda state, line=line_item: modify_pass(line))
                 items.append(line_item)
+                passenger_data.update({line_item: line_item.text()})
                 if i == 7:
                     i = 1
                 else:
                     i += 1
-
+                passenger_k.update({line_item: k})
                 k += 1
 
             j += 1
 
-        def modify(item, j ,k):
-            print(1)
+        def save(k, position, text):
+            k = int(k)
+            data = (position, text)
+            if k == 1:
+                query = ("update passenger set NameP = %s where NameP = %s;")
+            if k == 2:
+                query = ("update passenger set SurnameP = %s where SurnameP = %s;")
+            if k == 3:
+                query = ("update passenger set Patronymic = %s where Patronymic = %s;")
+            if k == 4:
+                query = ("update passenger set Passport = %s where Passport = %s;")
+            cursor.execute(query, data)
+            cnx.commit()
 
+        def modify_pass(item):
+            print(1)
+            self.savebutton.clicked.connect(save(passenger_k.get(item)), passenger_data.get(item), item.text())
+
+        def modify_trip(item, j ,k):
+            print(1)
+            #self.savebutton.clicked.connect(save(item ))
+            #text = item.text()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
