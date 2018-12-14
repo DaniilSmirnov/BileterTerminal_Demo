@@ -155,9 +155,11 @@ class Ui_MainWindow(object):
 
             j += 1
 
-        def save(k, position, text):
-            k = int(k)
-            data = (position, text)
+        def save(item):
+            k = passenger_k.get(item)
+            position = passenger_data.get(item)
+            text = item.text()
+            data = (text, position)
             if k == 1:
                 query = ("update passenger set NameP = %s where NameP = %s;")
             if k == 2:
@@ -171,7 +173,7 @@ class Ui_MainWindow(object):
 
         def modify_pass(item):
             print(1)
-            self.savebutton.clicked.connect(save(passenger_k.get(item)), passenger_data.get(item), item.text())
+            self.savebutton.clicked.connect(lambda: save(item))
 
         def modify_trip(item, j ,k):
             print(1)
