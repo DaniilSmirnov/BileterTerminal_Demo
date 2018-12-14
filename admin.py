@@ -20,6 +20,7 @@ passenger = []
 passenger_data = {}
 passenger_k = {}
 
+
 class Ui_MainWindow(object):
 
     def setupUi(self):
@@ -89,10 +90,10 @@ class Ui_MainWindow(object):
         self.savebutton = QtWidgets.QPushButton(self.centralwidget)
         self.savebutton.setObjectName("savebutton")
         self.verticalLayout.addWidget(self.savebutton)
-        self.cancelbutton = QtWidgets.QPushButton(self.centralwidget)
+        self.closebutton = QtWidgets.QPushButton(self.centralwidget)
         MainWindow.setCentralWidget(self.centralwidget)
-        self.cancelbutton.setObjectName("cancelbutton")
-        self.verticalLayout.addWidget(self.cancelbutton)
+        self.closebutton.setObjectName("cancelbutton")
+        self.verticalLayout.addWidget(self.closebutton)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 575, 21))
         self.menubar.setObjectName("menubar")
@@ -107,8 +108,9 @@ class Ui_MainWindow(object):
     def retranslateMainUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.savebutton.setText(_translate("MainWindow", "Save"))
-        self.cancelbutton.setText(_translate("MainWindow", "Cancel"))
+        self.savebutton.setText(_translate("MainWindow", "Сохранить"))
+        self.closebutton.setText(_translate("MainWindow", "Выйти"))
+        self.closebutton.clicked.connect(self.setupUi)
 
         line_item = QtWidgets.QLabel("Рейсы")
         items.append(line_item)
@@ -201,6 +203,8 @@ class Ui_MainWindow(object):
 
         def modify_trip(item):
             self.savebutton.clicked.connect(lambda: save_trip(item))
+
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
