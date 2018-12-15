@@ -134,8 +134,10 @@ class Ui_MainWindow(object):
                     i += 1
                 trip_k.update({line_item: k})
                 k += 1
-
+            line_item = QtWidgets.QPushButton("Добавить")
+            self.gridLayout.addWidget(line_item, j, k, 1, 1)
             j += 1
+
 
         line_item = QtWidgets.QLabel("Пассажиры")
         items.append(line_item)
@@ -157,8 +159,13 @@ class Ui_MainWindow(object):
                     i += 1
                 passenger_k.update({line_item: k})
                 k += 1
-
+            line_item = QtWidgets.QPushButton("Добавить")
+            self.gridLayout.addWidget(line_item, j, k, 1, 1)
+            line_item.clicked.connect(self.setuptripUi)
             j += 1
+
+        def add_pass():
+            MainWindow.setuptripUi()
 
         def save_pass(item):
             k = passenger_k.get(item)
@@ -204,8 +211,6 @@ class Ui_MainWindow(object):
         def modify_trip(item):
             self.savebutton.clicked.connect(lambda: save_trip(item))
 
-
-
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -232,6 +237,47 @@ class Ui_MainWindow(object):
                     if password[0] == password_entered:
                         self.setupMainUi()
 
+    def setuptripUi(self):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.showFullScreen()
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.centralwidget)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit.setObjectName("lineEdit")
+        self.horizontalLayout.addWidget(self.lineEdit)
+        self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_2.setObjectName("lineEdit_2")
+        self.horizontalLayout.addWidget(self.lineEdit_2)
+        self.lineEdit_3 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_3.setObjectName("lineEdit_3")
+        self.horizontalLayout.addWidget(self.lineEdit_3)
+        self.lineEdit_4 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_4.setObjectName("lineEdit_4")
+        self.horizontalLayout.addWidget(self.lineEdit_4)
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton.setObjectName("pushButton")
+        self.horizontalLayout.addWidget(self.pushButton)
+        self.horizontalLayout_2.addLayout(self.horizontalLayout)
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 399, 21))
+        self.menubar.setObjectName("menubar")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+
+        self.retranslatetripUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslatetripUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.pushButton.setText(_translate("MainWindow", "PushButton"))
 
 if __name__ == "__main__":
     import sys
