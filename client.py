@@ -237,21 +237,26 @@ class Ui_MainWindow(object):
         j = 0
         k = 0
         for item in cursor:
-            #trip.append(item[0])
             for value in item:
                 if k == 0:
                     k += 1
+                    trip_data.update({j: str(value)})
                     continue
                 line_item = QtWidgets.QLabel(str(value))
                 self.gridLayout.addWidget(line_item, j, k, 1, 1)
-                #line_item.textChanged.connect(lambda state, line=line_item: modify_trip(line))
-                #items.append(line_item)
-                #trip_data.update({line_item: line_item.text()})
-                #trip_k.update({line_item: k})
                 k += 1
                 if k % 8 == 0:
+                    line_item = QtWidgets.QPushButton("Купить")
+                    self.gridLayout.addWidget(line_item, j, k, 1, 1)
+                    line_item.clicked.connect(lambda state, row=j: open_info(row))
                     k = 0
                     j += 1
+
+        def open_info(row):
+            id = trip_data.get(row)
+            trip_data.clear()
+            trip_data.update({"id": id})
+            self.setupRouteInfoUi()
 
     def setupRouteInfoUi(self):
         MainWindow.setObjectName("MainWindow")
@@ -279,12 +284,12 @@ class Ui_MainWindow(object):
         self.arrivelabel = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.arrivelabel.setObjectName("arrivelabel")
         self.verticalLayout.addWidget(self.arrivelabel)
-        self.traveltimelabel = QtWidgets.QLabel(self.verticalLayoutWidget)
-        self.traveltimelabel.setObjectName("traveltimelabel")
-        self.verticalLayout.addWidget(self.traveltimelabel)
-        self.seatslabel = QtWidgets.QLabel(self.verticalLayoutWidget)
-        self.seatslabel.setObjectName("seatslabel")
-        self.verticalLayout.addWidget(self.seatslabel)
+        self.companylabel = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.companylabel.setObjectName("traveltimelabel")
+        self.verticalLayout.addWidget(self.companylabel)
+        self.costlabel = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.costlabel.setObjectName("seatslabel")
+        self.verticalLayout.addWidget(self.costlabel)
         self.buybutton = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.buybutton.setObjectName("buybutton")
         self.verticalLayout.addWidget(self.buybutton)
@@ -303,7 +308,7 @@ class Ui_MainWindow(object):
         self.retranslateRouteInfoUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def retranslateRouteInfoUi(self):
+    def retranslateRouteInfoUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.routelabel.setText(_translate("MainWindow", "Рейс"))
@@ -311,10 +316,25 @@ class Ui_MainWindow(object):
         self.wherelabel.setText(_translate("MainWindow", "В"))
         self.whenlabel.setText(_translate("MainWindow", "Время отправления:"))
         self.arrivelabel.setText(_translate("MainWindow", "Время прибытия:"))
-        self.traveltimelabel.setText(_translate("MainWindow", "Время в пути:"))
-        self.seatslabel.setText(_translate("MainWindow", "Количество мест:"))
+        self.companylabel.setText(_translate("MainWindow", "Компания:"))
+        self.costlabel.setText(_translate("MainWindow", "Стоимость:"))
         self.buybutton.setText(_translate("MainWindow", "Купить"))
         self.backbutton.setText(_translate("MainWindow", "Назад"))
+
+        query = "select * from trip where idTrip= %s;"
+        data = (str(trip_data.get("id")))
+        cursor.execute(query, (data,))
+
+        j = 0
+        for item in cursor:
+            for value in item:
+                if j == 0:
+                    j += 1
+                    continue
+                line_item = QtWidgets.QLabel(str(value))
+                self.verticalLayout.addWidget(line_item)
+
+                j += 1
 
 
 if __name__ == "__main__":
