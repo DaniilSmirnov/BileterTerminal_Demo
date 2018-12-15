@@ -128,23 +128,21 @@ class Ui_MainWindow(object):
                 line_item.textChanged.connect(lambda state, line=line_item: modify_trip(line))
                 items.append(line_item)
                 trip_data.update({line_item: line_item.text()})
-                if i == 7:
-                    i = 1
-                else:
-                    i += 1
                 trip_k.update({line_item: k})
                 k += 1
-            line_item = QtWidgets.QPushButton("Добавить")
-            self.gridLayout.addWidget(line_item, j, k, 1, 1)
-            j += 1
-
+                if k % 8 == 0:
+                    j += 1
+                    k = 0
+        line_item = QtWidgets.QPushButton("Добавить")
+        self.gridLayout.addWidget(line_item, j+1, k, 1, 1)
+        line_item.clicked.connect(self.setuptripUi)
 
         line_item = QtWidgets.QLabel("Пассажиры")
         items.append(line_item)
         query = ("select * from passenger;")
         cursor.execute(query)
-        i = 1
         k = 0
+        j += 2
         for item in cursor:
             passenger.append(item[0])
             for value in item:
@@ -153,19 +151,11 @@ class Ui_MainWindow(object):
                 line_item.textChanged.connect(lambda state, line=line_item: modify_pass(line))
                 items.append(line_item)
                 passenger_data.update({line_item: line_item.text()})
-                if i == 7:
-                    i = 1
-                else:
-                    i += 1
                 passenger_k.update({line_item: k})
                 k += 1
-            line_item = QtWidgets.QPushButton("Добавить")
-            self.gridLayout.addWidget(line_item, j, k, 1, 1)
-            line_item.clicked.connect(self.setuptripUi)
-            j += 1
-
-        def add_pass():
-            MainWindow.setuptripUi()
+                if k % 5 == 0:
+                    j += 1
+                    k = 0
 
         def save_pass(item):
             k = passenger_k.get(item)
@@ -242,29 +232,59 @@ class Ui_MainWindow(object):
         MainWindow.showFullScreen()
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.centralwidget)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit.setObjectName("lineEdit")
-        self.horizontalLayout.addWidget(self.lineEdit)
+        self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
+        self.gridLayout.setObjectName("gridLayout")
         self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_2.setObjectName("lineEdit_2")
-        self.horizontalLayout.addWidget(self.lineEdit_2)
-        self.lineEdit_3 = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit_3.setObjectName("lineEdit_3")
-        self.horizontalLayout.addWidget(self.lineEdit_3)
-        self.lineEdit_4 = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit_4.setObjectName("lineEdit_4")
-        self.horizontalLayout.addWidget(self.lineEdit_4)
+        self.gridLayout.addWidget(self.lineEdit_2, 1, 1, 1, 1)
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout.addWidget(self.pushButton)
-        self.horizontalLayout_2.addLayout(self.horizontalLayout)
+        self.gridLayout.addWidget(self.pushButton, 1, 7, 1, 1)
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.gridLayout.addWidget(self.pushButton_2, 1, 8, 1, 1)
+        self.lineEdit_3 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_3.setObjectName("lineEdit_3")
+        self.gridLayout.addWidget(self.lineEdit_3, 1, 2, 1, 1)
+        self.label_4 = QtWidgets.QLabel(self.centralwidget)
+        self.label_4.setObjectName("label_4")
+        self.gridLayout.addWidget(self.label_4, 0, 3, 1, 1)
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setObjectName("label")
+        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setObjectName("label_2")
+        self.gridLayout.addWidget(self.label_2, 0, 1, 1, 1)
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setObjectName("label_3")
+        self.gridLayout.addWidget(self.label_3, 0, 2, 1, 1)
+        self.lineEdit_5 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_5.setObjectName("lineEdit_5")
+        self.gridLayout.addWidget(self.lineEdit_5, 1, 4, 1, 1)
+        self.lineEdit_6 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_6.setObjectName("lineEdit_6")
+        self.gridLayout.addWidget(self.lineEdit_6, 1, 5, 1, 1)
+        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit.setObjectName("lineEdit")
+        self.gridLayout.addWidget(self.lineEdit, 1, 0, 1, 1)
+        self.lineEdit_4 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_4.setObjectName("lineEdit_4")
+        self.gridLayout.addWidget(self.lineEdit_4, 1, 3, 1, 1)
+        self.lineEdit_7 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_7.setObjectName("lineEdit_7")
+        self.gridLayout.addWidget(self.lineEdit_7, 1, 6, 1, 1)
+        self.label_5 = QtWidgets.QLabel(self.centralwidget)
+        self.label_5.setObjectName("label_5")
+        self.gridLayout.addWidget(self.label_5, 0, 4, 1, 1)
+        self.label_6 = QtWidgets.QLabel(self.centralwidget)
+        self.label_6.setObjectName("label_6")
+        self.gridLayout.addWidget(self.label_6, 0, 5, 1, 1)
+        self.label_7 = QtWidgets.QLabel(self.centralwidget)
+        self.label_7.setObjectName("label_7")
+        self.gridLayout.addWidget(self.label_7, 0, 6, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 399, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 557, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -277,7 +297,25 @@ class Ui_MainWindow(object):
     def retranslatetripUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.pushButton.setText(_translate("MainWindow", "PushButton"))
+        self.pushButton.setText(_translate("MainWindow", "Сохранить"))
+        self.pushButton_2.setText(_translate("MainWindow", "Назад"))
+        self.label_4.setText(_translate("MainWindow", "Когда"))
+        self.label.setText(_translate("MainWindow", "Откуда"))
+        self.label_2.setText(_translate("MainWindow", "Куда"))
+        self.label_3.setText(_translate("MainWindow", "Когда "))
+        self.label_5.setText(_translate("MainWindow", "Номер Рейса"))
+        self.label_6.setText(_translate("MainWindow", "Компания"))
+        self.label_7.setText(_translate("MainWindow", "Стоимость"))
+
+        self.pushButton.clicked.connect(self.writetrip)
+
+    def writetrip(self):
+        query = "insert into trip(FromCity, ToCity, DateDeparture, DateArrival, TripNumber, Company, Cost)values(%s, %s, %s, %s, %s, %s, %s);"
+        data = (self.lineEdit.text(), self.lineEdit_2.text(),  self.lineEdit_3.text(), self.lineEdit_4.text(), self.lineEdit_5.text(), self.lineEdit_6.text(), self.lineEdit_7.text())
+        cursor.execute(query, data)
+        cnx.commit()
+        self.setupMainUi()
+
 
 if __name__ == "__main__":
     import sys
