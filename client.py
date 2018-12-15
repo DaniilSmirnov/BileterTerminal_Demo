@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import MySQLdb #pip install --only-binary :all: mysqlclient
 from docx import Document #pip install python-docx
 from docx.shared import Inches
+import mysql.connector
 
+cnx = mysql.connector.connect(user='root', password='i130813',
+                              host='127.0.0.1',
+                              database='mydb')
+cursor = cnx.cursor()
+
+trip_data = {}
 
 class Ui_MainWindow(object):
     def setupUi(self):
@@ -131,8 +137,16 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "Поиск по номеру рейса"))
         self.infobutton.setText(_translate("MainWindow", "Инфо"))
         self.searchbutton.setText(_translate("MainWindow", "Поиск"))
+        self.searchbutton.clicked.connect(self.prepareGlobalViewUi)
 
-        self.searchbutton.clicked.connect(self.setupGlobalViewUi)
+    def prepareGlobalViewUi(self):
+        if self.whenedit.text() != "" and self.fromedit.text() != "" and self.whereedit.text() != "":
+            trip_data.update({"where": self.whereedit.text()})
+            trip_data.update({"from": self.fromedit.text()})
+            data = self.whenedit.text().split(".")
+            data = str(data[2]) + "-" + str(data[1]) + "-" + str(data[0])
+            trip_data.update({"when": data})
+        self.setupGlobalViewUi()
 
     def setupGlobalViewUi(self):
         MainWindow.setObjectName("MainWindow")
@@ -215,6 +229,29 @@ class Ui_MainWindow(object):
         self.filler.setText(_translate("MainWindow", " "))
         self.backtomainbutton.setText(_translate("MainWindow", "Назад"))
         self.backtomainbutton.clicked.connect(self.setupUi)
+
+        query = "select * from trip where FromCity= %s and ToCity= %s and DateDeparture= %s ;"
+        data = (trip_data.get("from"), trip_data.get("where"), trip_data.get("when"))
+        cursor.execute(query, data)
+
+        j = 0
+        k = 0
+        for item in cursor:
+            #trip.append(item[0])
+            for value in item:
+                if k == 0:
+                    k += 1
+                    continue
+                line_item = QtWidgets.QLabel(str(value))
+                self.gridLayout.addWidget(line_item, j, k, 1, 1)
+                #line_item.textChanged.connect(lambda state, line=line_item: modify_trip(line))
+                #items.append(line_item)
+                #trip_data.update({line_item: line_item.text()})
+                #trip_k.update({line_item: k})
+                k += 1
+                if k % 8 == 0:
+                    k = 0
+                    j += 1
 
     def setupRouteInfoUi(self):
         MainWindow.setObjectName("MainWindow")
