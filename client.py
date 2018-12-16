@@ -146,6 +146,8 @@ class Ui_MainWindow(object):
             data = self.whenedit.text().split(".")
             data = str(data[2]) + "-" + str(data[1]) + "-" + str(data[0])
             trip_data.update({"when": data})
+        if self.numberedit.text() != "":
+            trip_data.update({"route": self.numberedit.text()})
         self.setupGlobalViewUi()
 
     def setupGlobalViewUi(self):
@@ -230,9 +232,14 @@ class Ui_MainWindow(object):
         self.backtomainbutton.setText(_translate("MainWindow", "Назад"))
         self.backtomainbutton.clicked.connect(self.setupUi)
 
-        query = "select * from trip where FromCity= %s and ToCity= %s and DateDeparture= %s ;"
-        data = (trip_data.get("from"), trip_data.get("where"), trip_data.get("when"))
-        cursor.execute(query, data)
+        if trip_data.get("from") != None:
+            query = "select * from trip where FromCity= %s and ToCity= %s and DateDeparture= %s ;"
+            data = (trip_data.get("from"), trip_data.get("where"), trip_data.get("when"))
+            cursor.execute(query, data)
+        else:
+            query = "select * from trip where TripNumber= %s ;"
+            data = (trip_data.get("route"))
+            cursor.execute(query, (data,))
 
         j = 0
         k = 0
@@ -374,6 +381,7 @@ class Ui_MainWindow(object):
         self.companylabel.setText(_translate("MainWindow", "Компания:"))
         self.arrivelabel.setText(_translate("MainWindow", "Время прибытия:"))
         self.backButton_2.setText(_translate("MainWindow", "Назад"))
+        self.nextButton.clicked.connect(self.createpassenger)
 
         query = "select * from trip where idTrip= %s;"
         data = (str(trip_data.get("id")))
@@ -402,6 +410,13 @@ class Ui_MainWindow(object):
                     self.costlabel.setText("Цена:" + str(value))
 
                 j += 1
+
+    def createpassenger(self):
+        if self.nameedit.text() != "" and self.surnameedit.text() != "" and self.partedit.text() != "" and self.passedit.text() != "":
+            data = (self.nameedit.text(), self.surnameedit.text(), self.partedit.text(), self.passedit.text())
+            query = "insert into passenger(NameP,SurnameP,Patronymic,Passport) values(%s,%s,%s,%s);"
+            cursor.execute(query, data)
+            cnx.commit()
 
 
 if __name__ == "__main__":
