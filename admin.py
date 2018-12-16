@@ -130,7 +130,7 @@ class Ui_MainWindow(object):
                 trip_data.update({line_item: line_item.text()})
                 trip_k.update({line_item: k})
                 k += 1
-                if k % 8 == 0:
+                if k % 10 == 0:
                     j += 1
                     k = 0
         line_item = QtWidgets.QPushButton("Добавить")
@@ -195,6 +195,10 @@ class Ui_MainWindow(object):
                 query = ("update trip set Company = %s where Company = %s;")
             if k == 7:
                 query = ("update trip set Cost = %s where Cost = %s;")
+            if k == 8:
+                query = ("update trip set time = %s where time = %s;")
+            if k == 9:
+                query = ("update trip set timea = %s where timea = %s;")
             cursor.execute(query, data)
             cnx.commit()
 

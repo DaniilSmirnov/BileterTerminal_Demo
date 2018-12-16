@@ -252,7 +252,7 @@ class Ui_MainWindow(object):
                 line_item = QtWidgets.QLabel(str(value))
                 self.gridLayout.addWidget(line_item, j, k, 1, 1)
                 k += 1
-                if k % 8 == 0:
+                if k % 10 == 0:
                     line_item = QtWidgets.QPushButton("Купить")
                     self.gridLayout.addWidget(line_item, j, k, 1, 1)
                     line_item.clicked.connect(lambda state, row=j: open_info(row))
@@ -408,6 +408,12 @@ class Ui_MainWindow(object):
                     self.companylabel.setText("Перевозчик:" + str(value))
                 if j == 7:
                     self.costlabel.setText("Цена:" + str(value))
+                if j == 8:
+                    text = self.whenlabel.text()
+                    self.whenlabel.setText(text + " " + str(value))
+                if j == 9:
+                    text = self.arrivelabel.text()
+                    self.arrivelabel.setText(text + " " + str(value))
 
                 j += 1
 
@@ -417,6 +423,134 @@ class Ui_MainWindow(object):
             query = "insert into passenger(NameP,SurnameP,Patronymic,Passport) values(%s,%s,%s,%s);"
             cursor.execute(query, data)
             cnx.commit()
+            self.setupPurchaseUi()
+
+    def setupPurchaseUi(self):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.showFullScreen()
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
+        self.gridLayout.setObjectName("gridLayout")
+        self.nextButton = QtWidgets.QPushButton(self.centralwidget)
+        self.nextButton.setObjectName("nextButton")
+        self.gridLayout.addWidget(self.nextButton, 8, 0, 1, 2)
+        self.backButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.backButton_2.setObjectName("backButton_2")
+        self.gridLayout.addWidget(self.backButton_2, 9, 0, 1, 2)
+        self.passlabel = QtWidgets.QLabel(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.passlabel.sizePolicy().hasHeightForWidth())
+        self.passlabel.setSizePolicy(sizePolicy)
+        self.passlabel.setObjectName("passlabel")
+        self.gridLayout.addWidget(self.passlabel, 3, 1, 1, 1)
+        self.namelabel = QtWidgets.QLabel(self.centralwidget)
+        self.namelabel.setObjectName("namelabel")
+        self.gridLayout.addWidget(self.namelabel, 0, 1, 1, 1)
+        self.fromlabel = QtWidgets.QLabel(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.fromlabel.sizePolicy().hasHeightForWidth())
+        self.fromlabel.setSizePolicy(sizePolicy)
+        self.fromlabel.setObjectName("fromlabel")
+        self.gridLayout.addWidget(self.fromlabel, 1, 0, 1, 1)
+        self.surnamelabel = QtWidgets.QLabel(self.centralwidget)
+        self.surnamelabel.setObjectName("surnamelabel")
+        self.gridLayout.addWidget(self.surnamelabel, 1, 1, 1, 1)
+        self.wherelabel = QtWidgets.QLabel(self.centralwidget)
+        self.wherelabel.setObjectName("wherelabel")
+        self.gridLayout.addWidget(self.wherelabel, 2, 0, 1, 1)
+        self.patrlabel = QtWidgets.QLabel(self.centralwidget)
+        self.patrlabel.setObjectName("patrlabel")
+        self.gridLayout.addWidget(self.patrlabel, 2, 1, 1, 1)
+        self.routelabel = QtWidgets.QLabel(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.routelabel.sizePolicy().hasHeightForWidth())
+        self.routelabel.setSizePolicy(sizePolicy)
+        self.routelabel.setObjectName("routelabel")
+        self.gridLayout.addWidget(self.routelabel, 0, 0, 1, 1)
+        self.whenlabel = QtWidgets.QLabel(self.centralwidget)
+        self.whenlabel.setObjectName("whenlabel")
+        self.gridLayout.addWidget(self.whenlabel, 3, 0, 1, 1)
+        self.costlabel = QtWidgets.QLabel(self.centralwidget)
+        self.costlabel.setObjectName("costlabel")
+        self.gridLayout.addWidget(self.costlabel, 6, 0, 1, 1)
+        self.companylabel = QtWidgets.QLabel(self.centralwidget)
+        self.companylabel.setObjectName("companylabel")
+        self.gridLayout.addWidget(self.companylabel, 5, 0, 1, 1)
+        self.arrivelabel = QtWidgets.QLabel(self.centralwidget)
+        self.arrivelabel.setObjectName("arrivelabel")
+        self.gridLayout.addWidget(self.arrivelabel, 4, 0, 1, 1)
+        self.cashlabel = QtWidgets.QLabel(self.centralwidget)
+        self.cashlabel.setObjectName("label")
+        self.gridLayout.addWidget(self.cashlabel, 7, 0, 1, 1)
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 814, 21))
+        self.menubar.setObjectName("menubar")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+
+        self.retranslatePurchaseUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslatePurchaseUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.nextButton.setText(_translate("MainWindow", "Оплатить"))
+        self.backButton_2.setText(_translate("MainWindow", "Отмена"))
+        self.passlabel.setText(_translate("MainWindow", "Паспорт:"))
+        self.namelabel.setText(_translate("MainWindow", "Имя:"))
+        self.fromlabel.setText(_translate("MainWindow", "Из:"))
+        self.surnamelabel.setText(_translate("MainWindow", "Фамилия:"))
+        self.wherelabel.setText(_translate("MainWindow", "В:l"))
+        self.patrlabel.setText(_translate("MainWindow", "Отчество:"))
+        self.routelabel.setText(_translate("MainWindow", "Рейс:"))
+        self.whenlabel.setText(_translate("MainWindow", "Время отправления:"))
+        self.costlabel.setText(_translate("MainWindow", "Стоимость:"))
+        self.companylabel.setText(_translate("MainWindow", "Компания:"))
+        self.arrivelabel.setText(_translate("MainWindow", "Время прибытия:"))
+        self.cashlabel.setText(_translate("MainWindow", "Внесено: "))
+
+        query = "select * from trip where idTrip= %s;"
+        data = (str(trip_data.get("id")))
+        cursor.execute(query, (data,))
+        j = 0
+        for item in cursor:
+            for value in item:
+                if j == 0:
+                    j += 1
+                    continue
+
+                if j == 1:
+                    self.routelabel.setText("Номер рейса:" + str(value))
+                if j == 2:
+                    self.fromlabel.setText("Из:" + str(value))
+                if j == 3:
+                    self.wherelabel.setText("В:" + str(value))
+                if j == 4:
+                    self.whenlabel.setText("Время отправления:" + str(value))
+                if j == 5:
+                    self.arrivelabel.setText("Время прибытия:" + str(value))
+                if j == 6:
+                    self.companylabel.setText("Перевозчик:" + str(value))
+                if j == 7:
+                    self.costlabel.setText("Цена:" + str(value))
+                if j == 8:
+                    text = self.whenlabel.text()
+                    self.whenlabel.setText(text + " " + str(value))
+                if j == 9:
+                    text = self.arrivelabel.text()
+                    self.arrivelabel.setText(text + " " + str(value))
+
+                j += 1
 
 
 if __name__ == "__main__":
