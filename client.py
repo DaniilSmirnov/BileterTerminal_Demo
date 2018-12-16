@@ -423,6 +423,7 @@ class Ui_MainWindow(object):
             query = "insert into passenger(NameP,SurnameP,Patronymic,Passport) values(%s,%s,%s,%s);"
             cursor.execute(query, data)
             cnx.commit()
+            trip_data.update({"pass": self.passedit.text()})
             self.setupPurchaseUi()
 
     def setupPurchaseUi(self):
@@ -518,6 +519,7 @@ class Ui_MainWindow(object):
         self.companylabel.setText(_translate("MainWindow", "Компания:"))
         self.arrivelabel.setText(_translate("MainWindow", "Время прибытия:"))
         self.cashlabel.setText(_translate("MainWindow", "Внесено: "))
+        self.nextButton.clicked.connect(self.pay)
 
         query = "select * from trip where idTrip= %s;"
         data = (str(trip_data.get("id")))
@@ -551,6 +553,89 @@ class Ui_MainWindow(object):
                     self.arrivelabel.setText(text + " " + str(value))
 
                 j += 1
+
+        query = "select * from passenger where Passport= %s;"
+        data = (str(trip_data.get("pass")))
+        cursor.execute(query, (data,))
+        j = 0
+        for item in cursor:
+            for value in item:
+                if j == 0:
+                    trip_data.update({"pass_id": value})
+                    j += 1
+                    continue
+
+                if j == 1:
+                    self.namelabel.setText("Имя: " + str(value))
+                if j == 2:
+                    self.surnamelabel.setText("Фамилия: " + str(value))
+                if j == 3:
+                    self.patrlabel.setText("Отчество: " + str(value))
+                if j == 4:
+                    self.passlabel.setText("Паспорт: " + str(value))
+
+                j += 1
+
+    def pay(self):
+        document = Document()
+        document.add_heading('Билет на автобус', 0)
+
+        query = "select * from trip where idTrip= %s;"
+        data = (str(trip_data.get("id")))
+        cursor.execute(query, (data,))
+        j = 0
+        for item in cursor:
+            for value in item:
+                if j == 0:
+                    j += 1
+                    continue
+
+                if j == 1:
+                    p = document.add_paragraph("Рейс: " + str(value))
+                if j == 2:
+                    p.add_run("\nИз: " + str(value))
+                if j == 3:
+                    p.add_run("\nВ: " + str(value))
+                if j == 4:
+                    p.add_run("\nДата отправления: " + str(value))
+                if j == 5:
+                    p.add_run("\nДата прибытия: " + str(value))
+                if j == 6:
+                    p.add_run("\nПеревозчик: " + str(value))
+                if j == 7:
+                    p.add_run("\nЦена: " + str(value))
+                if j == 8:
+                    p.add_run("\nВремя отправления:" + str(value))
+                if j == 9:
+                    p.add_run("\nВремя прибытия: " + str(value))
+
+                j += 1
+
+        query = "select * from passenger where Passport= %s;"
+        data = (str(trip_data.get("pass")))
+        cursor.execute(query, (data,))
+        j = 0
+        for item in cursor:
+            for value in item:
+                if j == 0:
+                    trip_data.update({"pass_id": value})
+                    j += 1
+                    continue
+
+                if j == 1:
+                    p.add_run("\nИмя: " + str(value))
+                if j == 2:
+                    p.add_run("\nФамилия: " + str(value))
+                if j == 3:
+                    p.add_run("\nОтчество: " + str(value))
+                if j == 4:
+                    p.add_run("\nПаспорт: " + str(value))
+
+                j += 1
+
+        document.add_page_break()
+        document.save('Билет.docx')
+        self.setupUi()
 
 
 if __name__ == "__main__":
