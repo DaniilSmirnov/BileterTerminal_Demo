@@ -64,7 +64,7 @@ class Ui_MainWindow(object):
 
     def setupMainUi(self):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.showFullScreen()
+        #MainWindow.showFullScreen()
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -77,15 +77,6 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setObjectName("gridLayout")
-        self.lineEdit = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
-        self.lineEdit.setObjectName("lineEdit")
-        self.gridLayout.addWidget(self.lineEdit, 0, 0, 1, 1)
-        self.lineEdit_2 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
-        self.lineEdit_2.setObjectName("lineEdit_2")
-        self.gridLayout.addWidget(self.lineEdit_2, 0, 1, 1, 1)
-        self.lineEdit_3 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
-        self.lineEdit_3.setObjectName("lineEdit_3")
-        self.gridLayout.addWidget(self.lineEdit_3, 0, 2, 1, 1)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.verticalLayout.addWidget(self.scrollArea)
         self.savebutton = QtWidgets.QPushButton(self.centralwidget)
@@ -269,7 +260,6 @@ class Ui_MainWindow(object):
                         self.setupMainUi()
 
 
-
     def setuptripUi(self):
         MainWindow.setObjectName("MainWindow")
         #MainWindow.showFullScreen()
@@ -350,6 +340,7 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "Компания"))
         self.label_7.setText(_translate("MainWindow", "Стоимость"))
 
+        self.pushButton_2.setText(self.setupMainUi)
         self.pushButton.clicked.connect(self.writetrip)
 
     def writetrip(self):
