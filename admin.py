@@ -25,7 +25,7 @@ class Ui_MainWindow(object):
 
     def setupUi(self):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(814, 431)
+        MainWindow.resize(1200, 700)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
@@ -380,7 +380,7 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "Компания"))
         self.label_7.setText(_translate("MainWindow", "Стоимость"))
 
-        self.pushButton_2.setText(self.setupMainUi)
+        self.pushButton_2.clicked.connect(self.setupMainUi)
         self.pushButton.clicked.connect(self.writetrip)
 
     def writetrip(self):
