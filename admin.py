@@ -134,9 +134,9 @@ class Ui_MainWindow(object):
                 line_item.textChanged.connect(lambda state, line=line_item: modify_trip(line))
                 items.append(line_item)
 
-                line_item = QtWidgets.QLineEdit(str(value))
-                self.gridLayout.addWidget(line_item, j, k, 1, 1)
-                line_item.textChanged.connect(lambda state, row=j: delete_trip(row))
+                line_item = QtWidgets.QPushButton("Удалить")
+                self.gridLayout.addWidget(line_item, j, 11, 1, 1)
+                line_item.clicked.connect(lambda state, row=j: delete_trip(row))
                 items.append(line_item)
 
                 trip_data.update({line_item: line_item.text()})
@@ -155,6 +155,7 @@ class Ui_MainWindow(object):
         cursor.execute(query)
         k = 0
         j += 2
+        i = 0
         for item in cursor:
             passenger.append(item[0])
             for value in item:
@@ -167,11 +168,18 @@ class Ui_MainWindow(object):
                 self.gridLayout.addWidget(line_item, j, k, 1, 1)
                 line_item.textChanged.connect(lambda state, line=line_item: modify_pass(line))
                 items.append(line_item)
+
+                line_item = QtWidgets.QPushButton("Удалить")
+                self.gridLayout.addWidget(line_item, j, 5, 1, 1)
+                line_item.clicked.connect(lambda state, row=i: delete_pass(row))
+                items.append(line_item)
+
                 passenger_data.update({line_item: line_item.text()})
                 passenger_k.update({line_item: k})
                 k += 1
                 if k % 5 == 0:
                     j += 1
+                    i += 1
                     k = 0
 
         def save_pass(item):
@@ -194,7 +202,18 @@ class Ui_MainWindow(object):
             self.savebutton.clicked.connect(lambda: save_pass(item))
 
         def delete_trip(row):
-            print(1)
+            query = "delete from trip where idTrip=%s;"
+            data = row
+            cursor.execute(query, (data,))
+            cnx.commit()
+            self.setupMainUi()
+
+        def delete_pass(row):
+            query = "delete from passenger where idPassenger=%s;"
+            data = row
+            cursor.execute(query, (data,))
+            cnx.commit()
+            self.setupMainUi()
 
         def save_trip(item):
             k = trip_k.get(item)
@@ -253,7 +272,7 @@ class Ui_MainWindow(object):
 
     def setuptripUi(self):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.showFullScreen()
+        #MainWindow.showFullScreen()
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
