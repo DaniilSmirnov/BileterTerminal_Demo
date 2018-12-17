@@ -124,10 +124,21 @@ class Ui_MainWindow(object):
         for item in cursor:
             trip.append(item[0])
             for value in item:
+                if k == 0:
+                    line_item = QtWidgets.QLabel(str(value))
+                    self.gridLayout.addWidget(line_item, j, k, 1, 1)
+                    k += 1
+                    continue
                 line_item = QtWidgets.QLineEdit(str(value))
                 self.gridLayout.addWidget(line_item, j, k, 1, 1)
                 line_item.textChanged.connect(lambda state, line=line_item: modify_trip(line))
                 items.append(line_item)
+
+                line_item = QtWidgets.QLineEdit(str(value))
+                self.gridLayout.addWidget(line_item, j, k, 1, 1)
+                line_item.textChanged.connect(lambda state, row=j: delete_trip(row))
+                items.append(line_item)
+
                 trip_data.update({line_item: line_item.text()})
                 trip_k.update({line_item: k})
                 k += 1
@@ -147,6 +158,11 @@ class Ui_MainWindow(object):
         for item in cursor:
             passenger.append(item[0])
             for value in item:
+                if k == 0:
+                    line_item = QtWidgets.QLabel(str(value))
+                    self.gridLayout.addWidget(line_item, j, k, 1, 1)
+                    k += 1
+                    continue
                 line_item = QtWidgets.QLineEdit(str(value))
                 self.gridLayout.addWidget(line_item, j, k, 1, 1)
                 line_item.textChanged.connect(lambda state, line=line_item: modify_pass(line))
@@ -176,6 +192,9 @@ class Ui_MainWindow(object):
 
         def modify_pass(item):
             self.savebutton.clicked.connect(lambda: save_pass(item))
+
+        def delete_trip(row):
+            print(1)
 
         def save_trip(item):
             k = trip_k.get(item)
@@ -211,8 +230,6 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label_2.setText(_translate("MainWindow", "Login"))
         self.label.setText(_translate("MainWindow", "Password"))
-        self.loginedit.setText("1")
-        self.passedit.setText("1")
         self.pushButton.setText(_translate("MainWindow", "Войти"))
 
         self.pushButton.clicked.connect(self.login)
@@ -231,6 +248,8 @@ class Ui_MainWindow(object):
                 for (password) in cursor:
                     if password[0] == password_entered:
                         self.setupMainUi()
+
+
 
     def setuptripUi(self):
         MainWindow.setObjectName("MainWindow")
