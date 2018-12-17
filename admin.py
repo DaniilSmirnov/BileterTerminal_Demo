@@ -105,8 +105,31 @@ class Ui_MainWindow(object):
         self.closebutton.clicked.connect(self.setupUi)
 
         line_item = QtWidgets.QLabel("Рейсы")
-        items.append(line_item)
         self.gridLayout.addWidget(line_item, 0, 0, 1, 1)
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        line_item.setFont(font)
+
+        line_item = QtWidgets.QLabel("Id")
+        self.gridLayout.addWidget(line_item, 0, 1, 1, 1)
+        line_item = QtWidgets.QLabel("Откуда")
+        self.gridLayout.addWidget(line_item, 0, 2, 1, 1)
+        line_item = QtWidgets.QLabel("Куда")
+        self.gridLayout.addWidget(line_item, 0, 3, 1, 1)
+        line_item = QtWidgets.QLabel("Дата отправления")
+        self.gridLayout.addWidget(line_item, 0, 4, 1, 1)
+        line_item = QtWidgets.QLabel("Дата прибытия")
+        self.gridLayout.addWidget(line_item, 0, 5, 1, 1)
+        line_item = QtWidgets.QLabel("Компания")
+        self.gridLayout.addWidget(line_item, 0, 6, 1, 1)
+        line_item = QtWidgets.QLabel("Цена")
+        self.gridLayout.addWidget(line_item, 0, 7, 1, 1)
+        line_item = QtWidgets.QLabel("Время отправления")
+        self.gridLayout.addWidget(line_item, 0, 8, 1, 1)
+        line_item = QtWidgets.QLabel("Время прибытия")
+        self.gridLayout.addWidget(line_item, 0, 9, 1, 1)
+
+
         query = ("select * from trip;")
         cursor.execute(query)
         i = 1
@@ -140,13 +163,30 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(line_item, j+1, k, 1, 1)
         line_item.clicked.connect(self.setuptripUi)
 
-        line_item = QtWidgets.QLabel("Пассажиры")
-        items.append(line_item)
         query = ("select * from passenger;")
         cursor.execute(query)
         k = 0
         j += 2
         i = 0
+        line_item = QtWidgets.QLabel("Пассажиры")
+        items.append(line_item)
+        self.gridLayout.addWidget(line_item, j, 0, 1, 1)
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        line_item.setFont(font)
+        items.append(line_item)
+
+        line_item = QtWidgets.QLabel("Id")
+        self.gridLayout.addWidget(line_item, j, 1, 1, 1)
+        line_item = QtWidgets.QLabel("Имя")
+        self.gridLayout.addWidget(line_item, j, 2, 1, 1)
+        line_item = QtWidgets.QLabel("Фамилия")
+        self.gridLayout.addWidget(line_item, j, 3, 1, 1)
+        line_item = QtWidgets.QLabel("Отчество")
+        self.gridLayout.addWidget(line_item, j, 4, 1, 1)
+        line_item = QtWidgets.QLabel("Паспорт")
+        self.gridLayout.addWidget(line_item, j, 5, 1, 1)
+        j += 1
         for item in cursor:
             passenger.append(item[0])
             for value in item:
