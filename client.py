@@ -2,7 +2,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from docx import Document #pip install python-docx
-from docx.shared import Inches
 import mysql.connector
 
 cnx = mysql.connector.connect(user='root', password='i130813',
@@ -11,6 +10,7 @@ cnx = mysql.connector.connect(user='root', password='i130813',
 cursor = cnx.cursor()
 
 trip_data = {}
+
 
 class Ui_MainWindow(object):
     def setupUi(self):

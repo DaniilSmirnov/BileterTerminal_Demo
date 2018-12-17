@@ -25,7 +25,7 @@ class Ui_MainWindow(object):
 
     def setupUi(self):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.showFullScreen()
+        MainWindow.resize(814, 431)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
@@ -45,6 +45,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.label)
         self.passedit = QtWidgets.QLineEdit(self.verticalLayoutWidget)
         self.passedit.setObjectName("passedit")
+        self.passedit.setEchoMode(QtWidgets.QLineEdit.Password)
         self.verticalLayout.addWidget(self.passedit)
         self.pushButton = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.pushButton.setObjectName("pushButton")
