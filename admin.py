@@ -85,6 +85,9 @@ class Ui_MainWindow(object):
         self.addbutton = QtWidgets.QPushButton(self.centralwidget)
         self.addbutton.setObjectName("addbutton")
         self.verticalLayout.addWidget(self.addbutton)
+        self.workerbutton = QtWidgets.QPushButton(self.centralwidget)
+        self.workerbutton.setObjectName("workerbutton")
+        self.verticalLayout.addWidget(self.workerbutton)
         self.closebutton = QtWidgets.QPushButton(self.centralwidget)
         MainWindow.setCentralWidget(self.centralwidget)
         self.closebutton.setObjectName("cancelbutton")
@@ -106,9 +109,11 @@ class Ui_MainWindow(object):
         self.savebutton.setText(_translate("MainWindow", "Сохранить"))
         self.closebutton.setText(_translate("MainWindow", "Выйти"))
         self.addbutton.setText(_translate("MainWindow", "Добавить рейс"))
+        self.workerbutton.setText(_translate("MainWindow", "Добавить сотрудника"))
 
         self.addbutton.clicked.connect(self.setuptripUi)
         self.closebutton.clicked.connect(self.setupUi)
+        self.workerbutton.clicked.connect(self.setupworkUi)
 
         line_item = QtWidgets.QLabel("Рейсы")
         self.gridLayout.addWidget(line_item, 0, 0, 1, 1)
@@ -116,25 +121,22 @@ class Ui_MainWindow(object):
         font.setPointSize(18)
         line_item.setFont(font)
 
-        line_item = QtWidgets.QLabel("Id")
-        self.gridLayout.addWidget(line_item, 0, 1, 1, 1)
         line_item = QtWidgets.QLabel("Откуда")
-        self.gridLayout.addWidget(line_item, 0, 2, 1, 1)
+        self.gridLayout.addWidget(line_item, 0, 1, 1, 1)
         line_item = QtWidgets.QLabel("Куда")
-        self.gridLayout.addWidget(line_item, 0, 3, 1, 1)
+        self.gridLayout.addWidget(line_item, 0, 2, 1, 1)
         line_item = QtWidgets.QLabel("Дата отправления")
-        self.gridLayout.addWidget(line_item, 0, 4, 1, 1)
+        self.gridLayout.addWidget(line_item, 0, 3, 1, 1)
         line_item = QtWidgets.QLabel("Дата прибытия")
-        self.gridLayout.addWidget(line_item, 0, 5, 1, 1)
+        self.gridLayout.addWidget(line_item, 0, 4, 1, 1)
         line_item = QtWidgets.QLabel("Компания")
-        self.gridLayout.addWidget(line_item, 0, 6, 1, 1)
+        self.gridLayout.addWidget(line_item, 0, 5, 1, 1)
         line_item = QtWidgets.QLabel("Цена")
-        self.gridLayout.addWidget(line_item, 0, 7, 1, 1)
+        self.gridLayout.addWidget(line_item, 0, 6, 1, 1)
         line_item = QtWidgets.QLabel("Время отправления")
-        self.gridLayout.addWidget(line_item, 0, 8, 1, 1)
+        self.gridLayout.addWidget(line_item, 0, 7, 1, 1)
         line_item = QtWidgets.QLabel("Время прибытия")
-        self.gridLayout.addWidget(line_item, 0, 9, 1, 1)
-
+        self.gridLayout.addWidget(line_item, 0, 8, 1, 1)
 
         query = ("select * from trip;")
         cursor.execute(query)
@@ -152,15 +154,14 @@ class Ui_MainWindow(object):
                 line_item = QtWidgets.QLineEdit(str(value))
                 self.gridLayout.addWidget(line_item, j, k, 1, 1)
                 line_item.textChanged.connect(lambda state, line=line_item: modify_trip(line))
-                items.append(line_item)
-
-                line_item = QtWidgets.QPushButton("Удалить")
-                self.gridLayout.addWidget(line_item, j, 11, 1, 1)
-                line_item.clicked.connect(lambda state, row=j: delete_trip(row))
-                items.append(line_item)
 
                 trip_data.update({line_item: line_item.text()})
                 trip_k.update({line_item: k})
+
+                but_item = QtWidgets.QPushButton("Удалить")
+                self.gridLayout.addWidget(but_item, j, 11, 1, 1)
+                but_item.clicked.connect(lambda state, row=j: delete_trip(row))
+
                 k += 1
                 if k % 10 == 0:
                     j += 1
@@ -172,21 +173,19 @@ class Ui_MainWindow(object):
         j += 2
         i = 0
         line_item = QtWidgets.QLabel("Пассажиры")
-        items.append(line_item)
         self.gridLayout.addWidget(line_item, j, 0, 1, 1)
         font = QtGui.QFont()
         font.setPointSize(18)
         line_item.setFont(font)
-        items.append(line_item)
 
         line_item = QtWidgets.QLabel("Имя")
-        self.gridLayout.addWidget(line_item, j, 3, 1, 1)
+        self.gridLayout.addWidget(line_item, j, 1, 1, 1)
         line_item = QtWidgets.QLabel("Фамилия")
-        self.gridLayout.addWidget(line_item, j, 4, 1, 1)
+        self.gridLayout.addWidget(line_item, j, 2, 1, 1)
         line_item = QtWidgets.QLabel("Отчество")
-        self.gridLayout.addWidget(line_item, j, 5, 1, 1)
+        self.gridLayout.addWidget(line_item, j, 3, 1, 1)
         line_item = QtWidgets.QLabel("Паспорт")
-        self.gridLayout.addWidget(line_item, j, 6, 1, 1)
+        self.gridLayout.addWidget(line_item, j, 4, 1, 1)
         j += 1
         for item in cursor:
             passenger.append(item[0])
@@ -199,19 +198,57 @@ class Ui_MainWindow(object):
                 line_item = QtWidgets.QLineEdit(str(value))
                 self.gridLayout.addWidget(line_item, j, k, 1, 1)
                 line_item.textChanged.connect(lambda state, line=line_item: modify_pass(line))
-                items.append(line_item)
-
-                line_item = QtWidgets.QPushButton("Удалить")
-                self.gridLayout.addWidget(line_item, j, 5, 1, 1)
-                line_item.clicked.connect(lambda state, row=i: delete_pass(row))
-                items.append(line_item)
 
                 passenger_data.update({line_item: line_item.text()})
                 passenger_k.update({line_item: k})
+
+                but_item = QtWidgets.QPushButton("Удалить")
+                self.gridLayout.addWidget(but_item, j, 5, 1, 1)
+                but_item.clicked.connect(lambda state, row=i: delete_pass(row))
+
                 k += 1
                 if k % 5 == 0:
                     j += 1
                     i += 1
+                    k = 0
+
+        line_item = QtWidgets.QLabel("Работники")
+        self.gridLayout.addWidget(line_item, j, 0, 1, 1)
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        line_item.setFont(font)
+
+        line_item = QtWidgets.QLabel("Имя")
+        self.gridLayout.addWidget(line_item, j, 1, 1, 1)
+        line_item = QtWidgets.QLabel("Фамилия")
+        self.gridLayout.addWidget(line_item, j, 2, 1, 1)
+        line_item = QtWidgets.QLabel("Логин")
+        self.gridLayout.addWidget(line_item, j, 3, 1, 1)
+        line_item = QtWidgets.QLabel("Пароль")
+        self.gridLayout.addWidget(line_item, j, 4, 1, 1)
+
+        j += 1
+        query = ("select * from worker;")
+        cursor.execute(query)
+        k = 0
+        for item in cursor:
+            trip.append(item[0])
+            for value in item:
+                if k == 0:
+                    line_item = QtWidgets.QLabel(str(value))
+                    self.gridLayout.addWidget(line_item, j, k, 1, 1)
+                    k += 1
+                    continue
+                line_item = QtWidgets.QLineEdit(str(value))
+                self.gridLayout.addWidget(line_item, j, k, 1, 1)
+
+                but_item = QtWidgets.QPushButton("Удалить")
+                self.gridLayout.addWidget(but_item, j, 5, 1, 1)
+                but_item.clicked.connect(lambda state, row=j: delete_work(row))
+
+                k += 1
+                if k % 5 == 0:
+                    j += 1
                     k = 0
 
         def save_pass(item):
@@ -229,6 +266,7 @@ class Ui_MainWindow(object):
                 query = ("update passenger set Passport = %s where Passport = %s;")
             cursor.execute(query, data)
             cnx.commit()
+            alert(text='Сохранение выполнено успешно', title='Успешно', button='OK')
 
         def modify_pass(item):
             self.savebutton.clicked.connect(lambda: save_pass(item))
@@ -242,6 +280,13 @@ class Ui_MainWindow(object):
 
         def delete_pass(row):
             query = "delete from passenger where idPassenger=%s;"
+            data = row
+            cursor.execute(query, (data,))
+            cnx.commit()
+            self.setupMainUi()
+
+        def delete_pass(row):
+            query = "delete from worker where idWorker=%s;"
             data = row
             cursor.execute(query, (data,))
             cnx.commit()
@@ -272,7 +317,7 @@ class Ui_MainWindow(object):
                 query = ("update trip set timea = %s where timea = %s;")
             cursor.execute(query, data)
             cnx.commit()
-            alert(text='Удаление выполнено успешно', title='Успешно', button='OK')
+            alert(text='Сохранение выполнено успешно', title='Успешно', button='OK')
 
         def modify_trip(item):
             self.savebutton.clicked.connect(lambda: save_trip(item))
@@ -301,10 +346,8 @@ class Ui_MainWindow(object):
                     if password[0] == password_entered:
                         self.setupMainUi()
 
-
     def setuptripUi(self):
         MainWindow.setObjectName("MainWindow")
-        #MainWindow.showFullScreen()
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
@@ -314,10 +357,10 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.lineEdit_2, 1, 1, 1, 1)
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setObjectName("pushButton")
-        self.gridLayout.addWidget(self.pushButton, 1, 7, 1, 1)
+        self.gridLayout.addWidget(self.pushButton, 1, 11, 1, 1)
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setObjectName("pushButton_2")
-        self.gridLayout.addWidget(self.pushButton_2, 1, 8, 1, 1)
+        self.gridLayout.addWidget(self.pushButton_2, 1, 10, 1, 1)
         self.lineEdit_3 = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_3.setObjectName("lineEdit_3")
         self.gridLayout.addWidget(self.lineEdit_3, 1, 2, 1, 1)
@@ -348,6 +391,12 @@ class Ui_MainWindow(object):
         self.lineEdit_7 = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_7.setObjectName("lineEdit_7")
         self.gridLayout.addWidget(self.lineEdit_7, 1, 6, 1, 1)
+        self.lineEdit_8 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_8.setObjectName("lineEdit_8")
+        self.gridLayout.addWidget(self.lineEdit_8, 1, 7, 1, 1)
+        self.lineEdit_9 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_9.setObjectName("lineEdit_8")
+        self.gridLayout.addWidget(self.lineEdit_9, 1, 8, 1, 1)
         self.label_5 = QtWidgets.QLabel(self.centralwidget)
         self.label_5.setObjectName("label_5")
         self.gridLayout.addWidget(self.label_5, 0, 4, 1, 1)
@@ -357,6 +406,12 @@ class Ui_MainWindow(object):
         self.label_7 = QtWidgets.QLabel(self.centralwidget)
         self.label_7.setObjectName("label_7")
         self.gridLayout.addWidget(self.label_7, 0, 6, 1, 1)
+        self.label_8 = QtWidgets.QLabel(self.centralwidget)
+        self.label_8.setObjectName("label_8")
+        self.gridLayout.addWidget(self.label_8, 0, 7, 1, 1)
+        self.label_9 = QtWidgets.QLabel(self.centralwidget)
+        self.label_9.setObjectName("label_9")
+        self.gridLayout.addWidget(self.label_9, 0, 8, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 557, 21))
@@ -381,13 +436,85 @@ class Ui_MainWindow(object):
         self.label_5.setText(_translate("MainWindow", "Номер Рейса"))
         self.label_6.setText(_translate("MainWindow", "Компания"))
         self.label_7.setText(_translate("MainWindow", "Стоимость"))
+        self.label_8.setText(_translate("MainWindow", "Время отправления"))
+        self.label_9.setText(_translate("MainWindow", "Время прибытия"))
 
         self.pushButton_2.clicked.connect(self.setupMainUi)
         self.pushButton.clicked.connect(self.writetrip)
 
     def writetrip(self):
-        query = "insert into trip(FromCity, ToCity, DateDeparture, DateArrival, TripNumber, Company, Cost)values(%s, %s, %s, %s, %s, %s, %s);"
-        data = (self.lineEdit.text(), self.lineEdit_2.text(),  self.lineEdit_3.text(), self.lineEdit_4.text(), self.lineEdit_5.text(), self.lineEdit_6.text(), self.lineEdit_7.text())
+        query = "insert into trip(FromCity, ToCity, DateDeparture, DateArrival, TripNumber, Company, Cost, time, timea)values(%s, %s, %s, %s, %s, %s, %s, %s, %s);"
+        data = (self.lineEdit.text(), self.lineEdit_2.text(), self.lineEdit_3.text(), self.lineEdit_4.text(),
+                self.lineEdit_5.text(), self.lineEdit_6.text(), self.lineEdit_7.text(), self.lineEdit_8.text(),
+                self.lineEdit_9.text())
+        cursor.execute(query, data)
+        cnx.commit()
+        self.setupMainUi()
+
+    def setupworkUi(self):
+        MainWindow.setObjectName("MainWindow")
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
+        self.gridLayout.setObjectName("gridLayout")
+        self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_2.setObjectName("lineEdit_2")
+        self.gridLayout.addWidget(self.lineEdit_2, 1, 1, 1, 1)
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton.setObjectName("pushButton")
+        self.gridLayout.addWidget(self.pushButton, 1, 11, 1, 1)
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.gridLayout.addWidget(self.pushButton_2, 1, 10, 1, 1)
+        self.lineEdit_3 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_3.setObjectName("lineEdit_3")
+        self.gridLayout.addWidget(self.lineEdit_3, 1, 2, 1, 1)
+        self.lineEdit_4 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_4.setObjectName("lineEdit_4")
+        self.gridLayout.addWidget(self.lineEdit_4, 1, 3, 1, 1)
+        self.label_4 = QtWidgets.QLabel(self.centralwidget)
+        self.label_4.setObjectName("label_4")
+        self.gridLayout.addWidget(self.label_4, 0, 3, 1, 1)
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setObjectName("label")
+        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setObjectName("label_2")
+        self.gridLayout.addWidget(self.label_2, 0, 1, 1, 1)
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setObjectName("label_3")
+        self.gridLayout.addWidget(self.label_3, 0, 2, 1, 1)
+        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit.setObjectName("lineEdit")
+        self.gridLayout.addWidget(self.lineEdit, 1, 0, 1, 1)
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 557, 21))
+        self.menubar.setObjectName("menubar")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+
+        self.retranslateworkUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateworkUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.pushButton.setText(_translate("MainWindow", "Сохранить"))
+        self.pushButton_2.setText(_translate("MainWindow", "Назад"))
+        self.label_4.setText(_translate("MainWindow", "Пароль"))
+        self.label.setText(_translate("MainWindow", "Имя"))
+        self.label_2.setText(_translate("MainWindow", "Фамилия"))
+        self.label_3.setText(_translate("MainWindow", "Логин"))
+
+        self.pushButton_2.clicked.connect(self.setupMainUi)
+        self.pushButton.clicked.connect(self.writeworker)
+
+    def writeworker(self):
+        query = "insert into worker(NameWorker, SurnameWorker, login, pass)values(%s, %s, %s, %s);"
+        data = (self.lineEdit.text(), self.lineEdit_2.text(), self.lineEdit_3.text(), self.lineEdit_4.text(),)
         cursor.execute(query, data)
         cnx.commit()
         self.setupMainUi()
@@ -395,6 +522,7 @@ class Ui_MainWindow(object):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
