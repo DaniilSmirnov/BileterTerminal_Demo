@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import mysql.connector
+from pymsgbox import alert
 
 cnx = mysql.connector.connect(user='root', password='i130813',
                               host='127.0.0.1',
@@ -64,7 +65,6 @@ class Ui_MainWindow(object):
 
     def setupMainUi(self):
         MainWindow.setObjectName("MainWindow")
-        #MainWindow.showFullScreen()
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -82,6 +82,9 @@ class Ui_MainWindow(object):
         self.savebutton = QtWidgets.QPushButton(self.centralwidget)
         self.savebutton.setObjectName("savebutton")
         self.verticalLayout.addWidget(self.savebutton)
+        self.addbutton = QtWidgets.QPushButton(self.centralwidget)
+        self.addbutton.setObjectName("addbutton")
+        self.verticalLayout.addWidget(self.addbutton)
         self.closebutton = QtWidgets.QPushButton(self.centralwidget)
         MainWindow.setCentralWidget(self.centralwidget)
         self.closebutton.setObjectName("cancelbutton")
@@ -102,6 +105,9 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.savebutton.setText(_translate("MainWindow", "Сохранить"))
         self.closebutton.setText(_translate("MainWindow", "Выйти"))
+        self.addbutton.setText(_translate("MainWindow", "Добавить рейс"))
+
+        self.addbutton.clicked.connect(self.setuptripUi)
         self.closebutton.clicked.connect(self.setupUi)
 
         line_item = QtWidgets.QLabel("Рейсы")
@@ -159,9 +165,6 @@ class Ui_MainWindow(object):
                 if k % 10 == 0:
                     j += 1
                     k = 0
-        line_item = QtWidgets.QPushButton("Добавить")
-        self.gridLayout.addWidget(line_item, j+1, k, 1, 1)
-        line_item.clicked.connect(self.setuptripUi)
 
         query = ("select * from passenger;")
         cursor.execute(query)
@@ -176,16 +179,14 @@ class Ui_MainWindow(object):
         line_item.setFont(font)
         items.append(line_item)
 
-        line_item = QtWidgets.QLabel("Id")
-        self.gridLayout.addWidget(line_item, j, 1, 1, 1)
         line_item = QtWidgets.QLabel("Имя")
-        self.gridLayout.addWidget(line_item, j, 2, 1, 1)
-        line_item = QtWidgets.QLabel("Фамилия")
         self.gridLayout.addWidget(line_item, j, 3, 1, 1)
-        line_item = QtWidgets.QLabel("Отчество")
+        line_item = QtWidgets.QLabel("Фамилия")
         self.gridLayout.addWidget(line_item, j, 4, 1, 1)
-        line_item = QtWidgets.QLabel("Паспорт")
+        line_item = QtWidgets.QLabel("Отчество")
         self.gridLayout.addWidget(line_item, j, 5, 1, 1)
+        line_item = QtWidgets.QLabel("Паспорт")
+        self.gridLayout.addWidget(line_item, j, 6, 1, 1)
         j += 1
         for item in cursor:
             passenger.append(item[0])
@@ -271,6 +272,7 @@ class Ui_MainWindow(object):
                 query = ("update trip set timea = %s where timea = %s;")
             cursor.execute(query, data)
             cnx.commit()
+            alert(text='Удаление выполнено успешно', title='Успешно', button='OK')
 
         def modify_trip(item):
             self.savebutton.clicked.connect(lambda: save_trip(item))
