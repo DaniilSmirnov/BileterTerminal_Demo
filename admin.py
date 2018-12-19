@@ -228,6 +228,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(line_item, j, 4, 1, 1)
 
         j += 1
+        i = 0
         query = ("select * from worker;")
         cursor.execute(query)
         k = 0
@@ -244,11 +245,12 @@ class Ui_MainWindow(object):
 
                 but_item = QtWidgets.QPushButton("Удалить")
                 self.gridLayout.addWidget(but_item, j, 5, 1, 1)
-                but_item.clicked.connect(lambda state, row=j: delete_work(row))
+                but_item.clicked.connect(lambda state, row=i: delete_work(row))
 
                 k += 1
                 if k % 5 == 0:
                     j += 1
+                    i += 1
                     k = 0
 
         def save_pass(item):
