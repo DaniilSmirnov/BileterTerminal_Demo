@@ -285,7 +285,7 @@ class Ui_MainWindow(object):
             cnx.commit()
             self.setupMainUi()
 
-        def delete_pass(row):
+        def delete_work(row):
             query = "delete from worker where idWorker=%s;"
             data = row
             cursor.execute(query, (data,))
