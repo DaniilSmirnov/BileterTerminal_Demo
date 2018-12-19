@@ -677,6 +677,7 @@ class Ui_MainWindow(object):
         time.sleep(1)
         self.setupUi()
 
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
