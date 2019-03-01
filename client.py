@@ -66,15 +66,15 @@ class Ui_MainWindow(object):
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 0, 0, 1, 2)
-        self.dateEdit = QtWidgets.QDateEdit(self.centralwidget)
+        self.whenedit = QtWidgets.QDateEdit(self.centralwidget)
         font = QtGui.QFont()
         font.setPointSize(10)
-        self.dateEdit.setFont(font)
-        self.dateEdit.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
-        self.dateEdit.setDateTime(QtCore.QDateTime(QtCore.QDate(2019, 3, 1), QtCore.QTime(0, 0, 0)))
-        self.dateEdit.setCalendarPopup(True)
-        self.dateEdit.setObjectName("dateEdit")
-        self.gridLayout.addWidget(self.dateEdit, 3, 1, 1, 1)
+        self.whenedit.setFont(font)
+        self.whenedit.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        self.whenedit.setDateTime(QtCore.QDateTime(QtCore.QDate(2019, 3, 1), QtCore.QTime(0, 0, 0)))
+        self.whenedit.setCalendarPopup(True)
+        self.whenedit.setObjectName("whenedit")
+        self.gridLayout.addWidget(self.whenedit, 3, 1, 1, 1)
         self.transportedit = QtWidgets.QComboBox(self.centralwidget)
         self.transportedit.setCursor(QtGui.QCursor(QtCore.Qt.OpenHandCursor))
         self.transportedit.setObjectName("transportedit")
@@ -108,13 +108,13 @@ class Ui_MainWindow(object):
         self.searchbutton.clicked.connect(self.prepareGlobalViewUi)
 
     def prepareGlobalViewUi(self):
-        if self.whenedit.text() != "" and self.fromedit.text() != "" and self.whereedit.text() != "" and self.transportedit.text() != "":
+        if self.whenedit.text() != "" and self.fromedit.text() != "" and self.whereedit.text() != "" and self.transportedit.itemText(self.transportedit.currentIndex()) != "":
             trip_data.update({"where": self.whereedit.text()})
             trip_data.update({"from": self.fromedit.text()})
             data = self.whenedit.text().split(".")
             data = str(data[2]) + "-" + str(data[1]) + "-" + str(data[0])
             trip_data.update({"when": data})
-            trip_data.update({"transport": self.transportedit.text()})
+            trip_data.update({"transport": self.transportedit.itemText(self.transportedit.currentIndex())})
             self.setupGlobalViewUi()
         else:
             if self.whenedit.text() != "":
@@ -209,21 +209,35 @@ class Ui_MainWindow(object):
 
         j = 0
         k = 0
+
+        x = 0
+        y = 0
+        font = QtGui.QFont()
+        font.setPointSize(10)
+
         for item in cursor:
+            item_group = QtWidgets.QGroupBox("Рейс: " + str(item[0]))
+            categorieslayout = QtWidgets.QVBoxLayout(item_group)
+            self.gridLayout.addWidget(item_group, x, y, 1, 1)
+            item_group.setFont(font)
             for value in item:
                 if k == 0:
                     k += 1
+                    j = str(value)
                     trip_data.update({j: str(value)})
                     continue
                 line_item = QtWidgets.QLabel(str(value))
-                self.gridLayout.addWidget(line_item, j, k, 1, 1)
+                categorieslayout.addWidget(line_item)
                 k += 1
-                if k % 10 == 0:
+                if k == 11:
                     line_item = QtWidgets.QPushButton("Купить")
-                    self.gridLayout.addWidget(line_item, j, k, 1, 1)
+                    categorieslayout.addWidget(line_item)
                     line_item.clicked.connect(lambda state, row=j: open_info(row))
                     k = 0
-                    j += 1
+            if x == 4:
+                y += 1
+                x = 0
+            x += 1
 
         def open_info(row):
             id = trip_data.get(row)
